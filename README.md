@@ -1,1 +1,1 @@
-# Τράπεζα Πειραιώς Redirection (χωρίς δόσεις)#
+# Magento 2 Piraeus Bank Redirection
