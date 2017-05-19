@@ -1,0 +1,21 @@
+{
+    "name": "natso/module-piraeus",
+    "description": "",
+    "license": "proprietary",
+    "authors": [
+        {
+            "email": "natso@natso.gr",
+            "name": "Natso"
+        }
+    ],
+    "minimum-stability": "dev",
+    "require": {},
+    "autoload": {
+        "files": [
+            "registration.php"
+        ],
+        "psr-4": {
+            "Natso\\Piraeus\\": ""
+        }
+    }
+}

@@ -1,0 +1,16 @@
+<?php $this->generateTicket(); ?>
+<?php $postData = $this->getPostData(); ?>
+
+<form id="redirect_form" action="<?php echo $this->getPostUrl(); ?>" method="POST">
+    <input type="hidden" name="AcquirerId"  		value="<?php echo $postData['AcquirerId'];?>" />
+    <input type="hidden" name="MerchantId" 			value="<?php echo $postData['MerchantId'];?>" />
+    <input type="hidden" name="PosId"				value="<?php echo $postData['PosId'];?>"/>
+    <input type="hidden" name="User" 				value="<?php echo $postData['User'];?>" />
+    <input type="hidden" name="LanguageCode" 		value="<?php echo $postData['LanguageCode'];?>" />
+    <input type="hidden" name="MerchantReference"  	value="<?php echo $postData['MerchantReference'];?>" />
+    <input type="hidden" name="ParamBackLink" 		value="<?php echo $postData['Parameters'];?>" />
+</form>
+
+<script type="text/javascript">
+    document.getElementById("redirect_form").submit();
+</script>

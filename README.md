@@ -1,3 +1,1 @@
-# Magento 2 Payment Module
-Redirection to Piraeus Bank
-
+# Τράπεζα Πειραιώς Redirection (χωρίς δόσεις)#
