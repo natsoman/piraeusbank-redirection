@@ -1,0 +1,5 @@
+<config>
+    <event name="payment_method_assign_data_piraeus">
+        <observer name="natso_custom_gateway_data_assign" instance="Natso\Piraeus\Observer\DataAssignObserver" />
+    </event>
+</config>

@@ -4,19 +4,21 @@ namespace Natso\Piraeus\Helper;
 
 class Data extends \Magento\Framework\App\Helper\AbstractHelper
 {
-
     public $scopeConfig;
     public $order;
+    public $cart;
     protected $_objectManager;
 
     public function __construct(
         \Magento\Framework\App\Config\ScopeConfigInterface $scopeConfig,
         \Magento\Sales\Api\Data\OrderInterface $order,
+        \Magento\Checkout\Model\Cart $cart,
         \Magento\Framework\ObjectManagerInterface $_objectManager
     ) {
-        $this->order          = $order;
-        $this->scopeConfig    = $scopeConfig;
-        $this->_objectManager = $_objectManager;
+        $this->order            = $order;
+        $this->cart             = $cart;
+        $this->scopeConfig      = $scopeConfig;
+        $this->_objectManager   = $_objectManager;
     }
 
     public function getTicketData()
@@ -60,6 +62,14 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             \Magento\Store\Model\ScopeInterface::SCOPE_STORE
         );
 
+        $ai = $this->order->getPayment()->getAdditionalInformation();
+
+        if ( isset($ai['installments']) ) {
+            $orderInstallments = $ai['installments'];
+        } else {
+            $orderInstallments = '';
+        }
+
         $ticketRequest = array(
             'AcquirerId'        => $acquirerId,
             'MerchantId'        => $merchantId,
@@ -70,7 +80,7 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
             'CurrencyCode'      => '978',
             'MerchantReference' => $checkout->getLastRealOrderId(),
             'Amount'            => round($this->order->getData('base_grand_total'), 2),
-            'Installments'      => '',
+            'Installments'      => $orderInstallments,
             'ExpirePreauth'     => $expirePreauth,
             'Bnpl'              => '',
             'Parameters'        => ''
@@ -114,6 +124,28 @@ class Data extends \Magento\Framework\App\Helper\AbstractHelper
         );
 
         return $postData;
+    }
+
+    public function getInstallments()
+    {
+        return $this->scopeConfig->getValue(
+            'payment/piraeus/installments',
+            \Magento\Store\Model\ScopeInterface::SCOPE_STORE
+        );
+    }
+
+    public function getAvailableInstallments() {
+        $available = array();
+        $installments = $this->getInstallments();
+        $bgt = $this->cart->getQuote()->getData('base_grand_total');
+        $installments = explode(";",$installments);
+        foreach ($installments as $inst) {
+            $inst = explode(":",$inst);
+            if ($inst[0] <= $bgt) {
+                array_push($available, $inst[1]);
+            }
+        }
+        return $available;
     }
 
     public function getTicketUrl()
